@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Contribute Data | Citizen Price Index</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <link rel="stylesheet" href="styles.css" />
+  <script defer src="script.js"></script>
+</head>
+<body>
+  <header class="site-header">
+    <div class="container header-inner">
+      <div class="logo">
+        <span class="logo-mark">CPI</span>
+        <span class="logo-text">Citizen Price Index</span>
+      </div>
+      <nav class="main-nav">
+        <a href="index.html" class="nav-link">Home</a>
+        <a href="contribute.html" class="nav-link active">Contribute</a>
+      </nav>
+    </div>
+  </header>
+
+  <main>
+    <section class="section">
+      <div class="container narrow">
+        <h1>Contribute a purchase</h1>
+        <p>
+          Help improve the Citizen Price Index by sharing a recent purchase.
+          You only need four things: date, location, item, and price – plus whether it was on sale.
+        </p>
+
+        <div class="notice-box">
+          For now, this form is a demo and does not send data anywhere.
+          It’s here so you can design and refine the data entry flow.
+        </div>
+
+        <form id="contribution-form" class="data-form">
+          <div class="form-row">
+            <label for="purchase-date">Date of purchase</label>
+            <input id="purchase-date" name="purchaseDate" type="date" required />
+          </div>
+
+          <div class="form-row">
+            <label for="location">Location (city, state or country)</label>
+            <input id="location" name="location" type="text" placeholder="e.g., San Francisco, CA" required />
+          </div>
+
+          <div class="form-row">
+            <label for="item">Item</label>
+            <input id="item" name="item" type="text" placeholder="e.g., 1 gallon of milk" required />
+          </div>
+
+          <div class="form-row form-row-inline">
+            <div>
+              <label for="price">Price paid</label>
+              <input id="price" name="price" type="number" step="0.01" min="0" placeholder="e.g., 4.79" required />
+            </div>
+
+            <div>
+              <label for="currency">Currency</label>
+              <select id="currency" name="currency">
+                <option value="USD">USD $</option>
+                <option value="EUR">EUR €</option>
+                <option value="GBP">GBP £</option>
+                <option value="OTHER">Other</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="form-row">
+            <span class="label">Was this price on sale?</span>
+            <div class="choice-row">
+              <label class="choice-pill">
+                <input type="radio" name="saleFlag" value="sale" required />
+                <span>On sale</span>
+              </label>
+              <label class="choice-pill">
+                <input type="radio" name="saleFlag" value="regular" />
+                <span>Regular price</span>
+              </label>
+            </div>
+          </div>
+
+          <div class="form-row">
+            <label for="notes">Notes (optional)</label>
+            <textarea id="notes" name="notes" rows="3" placeholder="Brand, store, or anything else that might be helpful."></textarea>
+          </div>
+
+          <button type="submit" class="btn primary full-width">Submit purchase</button>
+          <p id="form-message" class="form-message" aria-live="polite"></p>
+        </form>
+
+        <p class="small muted">
+          In a future version, this form can send data to a database, Google Sheet, or API.
+          For now, it’s designed as a clean data entry experience you can iterate on.
+        </p>
+      </div>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <div class="container footer-inner">
+      <span>&copy; <span id="year"></span> Citizen Price Index</span>
+      <span class="footer-note">Thank you for contributing.</span>
+    </div>
+  </footer>
+</body>
+</html>

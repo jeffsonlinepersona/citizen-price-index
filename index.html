@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Citizen Price Index</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <link rel="stylesheet" href="styles.css" />
+  <script defer src="script.js"></script>
+</head>
+<body>
+  <header class="site-header">
+    <div class="container header-inner">
+      <div class="logo">
+        <span class="logo-mark">CPI</span>
+        <span class="logo-text">Citizen Price Index</span>
+      </div>
+      <nav class="main-nav">
+        <a href="index.html" class="nav-link active">Home</a>
+        <a href="contribute.html" class="nav-link">Contribute</a>
+      </nav>
+    </div>
+  </header>
+
+  <main>
+    <!-- Hero / Index section -->
+    <section class="hero">
+      <div class="container hero-inner">
+        <div class="hero-text">
+          <p class="hero-kicker">A price index built by everyone.</p>
+          <h1>Citizen Price Index</h1>
+          <p class="hero-subtitle">
+            Track how everyday prices are changing using real receipts from real people.
+          </p>
+
+          <div class="index-card">
+            <div class="index-label">Current Index</div>
+            <div class="index-value" id="cpi-value">102.4</div>
+            <div class="index-meta">
+              <span id="cpi-change">+1.8 pts vs last year</span>
+              <span class="index-date" id="cpi-date">Updated: Today</span>
+            </div>
+          </div>
+
+          <div class="hero-actions">
+            <a href="contribute.html" class="btn primary">Contribute your prices</a>
+            <a href="#how-it-works" class="btn ghost">How it works</a>
+          </div>
+        </div>
+
+        <div class="hero-visual">
+          <!-- Simple abstract chart-style header graphic -->
+          <div class="hero-card hero-card-1"></div>
+          <div class="hero-card hero-card-2"></div>
+          <div class="hero-card hero-card-3"></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- How it works -->
+    <section id="how-it-works" class="section">
+      <div class="container">
+        <h2>How the index works</h2>
+        <div class="grid two-cols">
+          <div>
+            <p>
+              The Citizen Price Index is a simple, transparent way to see how the
+              cost of everyday life is changing over time.
+            </p>
+            <p>
+              Anyone can submit a recent purchase with the date, location, item, and price.
+              Over time, these small contributions add up to a bottom-up picture of inflation.
+            </p>
+          </div>
+          <div>
+            <ul class="step-list">
+              <li>
+                <span class="step-number">1</span>
+                <div>
+                  <strong>Capture real purchases</strong><br />
+                  Record the things you actually buy: groceries, gas, services, and more.
+                </div>
+              </li>
+              <li>
+                <span class="step-number">2</span>
+                <div>
+                  <strong>Normalize & aggregate</strong><br />
+                  Data is grouped by item type, location, and time to build a composite index.
+                </div>
+              </li>
+              <li>
+                <span class="step-number">3</span>
+                <div>
+                  <strong>Track change over time</strong><br />
+                  The index shows how the overall price level moves month to month and year to year.
+                </div>
+              </li>
+            </ul>
+          </div>
+        </div>
+
+        <div class="cta-card">
+          <div>
+            <h3>Your last receipt can improve the index.</h3>
+            <p>
+              It takes less than a minute to contribute. No account, no login – just the basics:
+              date, location, item, and price.
+            </p>
+          </div>
+          <a href="contribute.html" class="btn primary">Add a purchase</a>
+        </div>
+      </div>
+    </section>
+
+    <!-- Placeholder for future stats -->
+    <section class="section section-muted">
+      <div class="container">
+        <h2>What the community is measuring</h2>
+        <div class="grid three-cols stats-grid">
+          <div class="stat-card">
+            <div class="stat-label">Total submissions</div>
+            <div class="stat-value" id="stat-submissions">–</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-label">Cities represented</div>
+            <div class="stat-value" id="stat-cities">–</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-label">Most common category</div>
+            <div class="stat-value" id="stat-category">–</div>
+          </div>
+        </div>
+        <p class="muted small">
+          These numbers are placeholders for now. Once you connect a real data store,
+          this section can show live stats.
+        </p>
+      </div>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <div class="container footer-inner">
+      <span>&copy; <span id="year"></span> Citizen Price Index</span>
+      <span class="footer-note">Built from real-world prices, one receipt at a time.</span>
+    </div>
+  </footer>
+</body>
+</html>
