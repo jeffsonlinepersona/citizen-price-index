@@ -87,6 +87,13 @@ if (form) {
       });
     }
 
+    console.log("purchase_submitted event fired", {
+      zip,
+      priceNumber,
+      currency,
+      saleFlag,
+    });
+    
     setFormMessage(
       "success",
       "Thank you! In this demo, your entry is not stored yet – but the submission flow is working."
