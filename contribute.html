@@ -4,6 +4,16 @@
   <meta charset="UTF-8" />
   <title>Contribute Data | Citizen Price Index</title>
   <meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <!-- Google tag (gtag.js) -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-HLB035QZX6"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    gtag('config', 'G-HLB035QZX6');
+  </script>
+
   <link rel="stylesheet" href="styles.css" />
   <script defer src="script.js"></script>
 </head>
@@ -42,9 +52,27 @@
           </div>
 
           <div class="form-row">
-            <label for="location">Location (city, state or country)</label>
-            <input id="location" name="location" type="text" placeholder="e.g., San Francisco, CA" required />
-          </div>
+  <label for="zip">ZIP code</label>
+  <div class="zip-row">
+    <input
+      id="zip"
+      name="zip"
+      type="text"
+      inputmode="numeric"
+      pattern="\d{5}"
+      maxlength="5"
+      placeholder="e.g., 94103"
+      required
+    />
+    <button type="button" class="btn secondary" id="use-location-btn">
+      Use my location
+    </button>
+  </div>
+  <p class="small muted">
+    U.S. 5-digit ZIP code. You can also let your browser detect it using your current location.
+  </p>
+</div>
+
 
           <div class="form-row">
             <label for="item">Item</label>
