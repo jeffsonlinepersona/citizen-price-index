@@ -8,10 +8,15 @@
   <!-- Google tag (gtag.js) -->
   <script async src="https://www.googletagmanager.com/gtag/js?id=G-HLB035QZX6"></script>
   <script>
+    // Basic GA4 setup
     window.dataLayer = window.dataLayer || [];
-    function gtag(){dataLayer.push(arguments);}
+    function gtag(){ dataLayer.push(arguments); }
+
     gtag('js', new Date());
-    gtag('config', 'G-HLB035QZX6');
+
+    // debug_mode: true => makes events show up clearly in GA DebugView.
+    // For production, you can remove the third argument or set debug_mode: false.
+    gtag('config', 'G-HLB035QZX6', { debug_mode: true });
   </script>
 
   <link rel="stylesheet" href="styles.css" />

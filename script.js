@@ -6,7 +6,7 @@ if (yearSpan) {
   yearSpan.textContent = new Date().getFullYear();
 }
 
-// Simple "Updated: Today" text
+// Simple "Updated: Today" text on the index card
 const dateSpan = document.getElementById("cpi-date");
 if (dateSpan) {
   const today = new Date();
@@ -18,7 +18,7 @@ if (dateSpan) {
   dateSpan.textContent = `Updated: ${formatted}`;
 }
 
-// Fake stats (you can replace with real data later)
+// Fake stats (placeholder values until you connect a data source)
 const submissions = document.getElementById("stat-submissions");
 const cities = document.getElementById("stat-cities");
 const category = document.getElementById("stat-category");
@@ -27,7 +27,7 @@ if (submissions) submissions.textContent = "—";
 if (cities) cities.textContent = "—";
 if (category) category.textContent = "—";
 
-// Utility: set form message
+// Utility: set form message text/state
 function setFormMessage(type, text) {
   const messageEl = document.getElementById("form-message");
   if (!messageEl) return;
@@ -42,7 +42,7 @@ function setFormMessage(type, text) {
   }
 }
 
-// Handle contribution form
+// Handle contribution form submission
 const form = document.getElementById("contribution-form");
 if (form) {
   const zipInput = document.getElementById("zip");
@@ -75,25 +75,28 @@ if (form) {
     const saleFlagInput = form.querySelector('input[name="saleFlag"]:checked');
     const saleFlag = saleFlagInput ? saleFlagInput.value : "";
 
-    // GA4 event: track contribution submissions (if gtag is available)
+    // GA4 custom event: contribution_submit
+    // Parameters here (zip, currency, sale_flag, value) are what you will
+    // expose in GA via Custom dimensions/metrics.
     if (typeof gtag === "function") {
-      gtag("event", "purchase_submitted", {
+      gtag("event", "contribution_submit", {
         event_category: "contribution",
         event_label: "contribution_form",
-        value: priceNumber || undefined,
-        zip: zip || undefined,
-        currency: currency || undefined,
-        sale_flag: saleFlag || undefined,
+        value: priceNumber ?? undefined,  // used as custom metric
+        zip: zip || undefined,            // custom dimension
+        currency: currency || undefined,  // custom dimension
+        sale_flag: saleFlag || undefined, // custom dimension
       });
     }
 
-    console.log("purchase_submitted event fired", {
+    // Local console confirmation to help you debug in DevTools
+    console.log("contribution_submit event fired", {
       zip,
       priceNumber,
       currency,
       saleFlag,
     });
-    
+
     setFormMessage(
       "success",
       "Thank you! In this demo, your entry is not stored yet – but the submission flow is working."
@@ -103,7 +106,7 @@ if (form) {
   });
 }
 
-// "Use my location" button
+// "Use my location" button (geolocation + reverse geocode)
 const useLocationBtn = document.getElementById("use-location-btn");
 if (useLocationBtn) {
   const zipInput = document.getElementById("zip");

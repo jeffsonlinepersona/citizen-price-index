@@ -8,10 +8,15 @@
   <!-- Google tag (gtag.js) -->
   <script async src="https://www.googletagmanager.com/gtag/js?id=G-HLB035QZX6"></script>
   <script>
+    // Basic GA4 setup
     window.dataLayer = window.dataLayer || [];
-    function gtag(){dataLayer.push(arguments);}
+    function gtag(){ dataLayer.push(arguments); }
+
     gtag('js', new Date());
-    gtag('config', 'G-HLB035QZX6');
+
+    // debug_mode: true => makes events show up clearly in GA DebugView.
+    // For production, you can remove the third argument or set debug_mode: false.
+    gtag('config', 'G-HLB035QZX6', { debug_mode: true });
   </script>
 
   <link rel="stylesheet" href="styles.css" />
@@ -52,27 +57,26 @@
           </div>
 
           <div class="form-row">
-  <label for="zip">ZIP code</label>
-  <div class="zip-row">
-    <input
-      id="zip"
-      name="zip"
-      type="text"
-      inputmode="numeric"
-      pattern="\d{5}"
-      maxlength="5"
-      placeholder="e.g., 94103"
-      required
-    />
-    <button type="button" class="btn secondary" id="use-location-btn">
-      Use my location
-    </button>
-  </div>
-  <p class="small muted">
-    U.S. 5-digit ZIP code. You can also let your browser detect it using your current location.
-  </p>
-</div>
-
+            <label for="zip">ZIP code</label>
+            <div class="zip-row">
+              <input
+                id="zip"
+                name="zip"
+                type="text"
+                inputmode="numeric"
+                pattern="\d{5}"
+                maxlength="5"
+                placeholder="e.g., 94103"
+                required
+              />
+              <button type="button" class="btn secondary" id="use-location-btn">
+                Use my location
+              </button>
+            </div>
+            <p class="small muted">
+              U.S. 5-digit ZIP code. You can also let your browser detect it using your current location.
+            </p>
+          </div>
 
           <div class="form-row">
             <label for="item">Item</label>
