@@ -42,12 +42,70 @@ function setFormMessage(type, text) {
   }
 }
 
-// Handle contribution form submission
+// Handle contribution form submission with multiple items
 const form = document.getElementById("contribution-form");
 if (form) {
   const zipInput = document.getElementById("zip");
-  const priceInput = document.getElementById("price");
   const currencySelect = document.getElementById("currency");
+  const itemsContainer = document.getElementById("items-container");
+  const addItemBtn = document.getElementById("add-item-btn");
+
+  // Helper: create a single item row
+  function createItemRow(id) {
+    const row = document.createElement("div");
+    row.className = "item-row";
+    row.dataset.itemId = id;
+
+    row.innerHTML = `
+      <div class="item-fields">
+        <input type="text" name="item-desc" class="item-desc" placeholder="e.g., 1 dozen eggs" required />
+        <input type="number" name="item-price" class="item-price" step="0.01" min="0" placeholder="price e.g., 4.99" required />
+        <select name="item-sale" class="item-sale">
+          <option value="unspecified">Unspecified</option>
+          <option value="sale">On sale</option>
+          <option value="regular">Regular price</option>
+        </select>
+        <input type="text" name="item-note" class="item-note" placeholder="Note (brand, size, e.g., 'large, organic') (optional)" />
+        <button type="button" class="btn tertiary remove-item-btn" title="Remove item">×</button>
+      </div>
+    `;
+
+    const removeBtn = row.querySelector(".remove-item-btn");
+    removeBtn.addEventListener("click", () => {
+      // Ensure at least one row remains
+      if (itemsContainer.children.length > 1) {
+        row.remove();
+      } else {
+        // clear values instead of removing last row
+        row.querySelectorAll("input, select").forEach((el) => {
+          if (el.tagName === "INPUT") el.value = "";
+          else if (el.tagName === "SELECT") el.value = "unspecified";
+        });
+      }
+    });
+
+    return row;
+  }
+
+  // Initialize with one item row
+  function ensureInitialItem() {
+    itemsContainer.innerHTML = "";
+    itemsContainer.appendChild(createItemRow(1));
+  }
+
+  ensureInitialItem();
+
+  // Add new item
+  if (addItemBtn) {
+    addItemBtn.addEventListener("click", () => {
+      const nextId = itemsContainer.children.length + 1;
+      itemsContainer.appendChild(createItemRow(nextId));
+      // focus the new item's description
+      const last = itemsContainer.lastElementChild;
+      const desc = last.querySelector('.item-desc');
+      if (desc) desc.focus();
+    });
+  }
 
   form.addEventListener("submit", (event) => {
     event.preventDefault(); // prevent real submission for now
@@ -67,42 +125,74 @@ if (form) {
       }
     }
 
-    // Collect a few fields for analytics
-    const zip = zipInput ? zipInput.value.trim() : "";
-    const priceValue = priceInput ? priceInput.value.trim() : "";
-    const priceNumber = priceValue ? Number(priceValue) : null;
-    const currency = currencySelect ? currencySelect.value : "";
-    const saleFlagInput = form.querySelector('input[name="saleFlag"]:checked');
-    const saleFlag = saleFlagInput ? saleFlagInput.value : "";
+    // Collect items
+    const itemRows = Array.from(itemsContainer.querySelectorAll('.item-row'));
+    const items = [];
+    for (const row of itemRows) {
 
-    // GA4 custom event: contribution_submit
-    // Parameters here (zip, currency, sale_flag, value) are what you will
-    // expose in GA via Custom dimensions/metrics.
+      const descEl = row.querySelector('.item-desc');
+      const priceEl = row.querySelector('.item-price');
+      const saleEl = row.querySelector('.item-sale');
+      const noteEl = row.querySelector('.item-note');
+
+      const desc = descEl ? descEl.value.trim() : "";
+      const priceRaw = priceEl ? priceEl.value.trim() : "";
+      const price = priceRaw ? Number(priceRaw) : null;
+      const sale = saleEl ? saleEl.value : "unspecified";
+      const note = noteEl ? noteEl.value.trim() : "";
+
+      // skip entirely blank rows
+      if (!desc && (price === null || price === 0 || priceRaw === "")) continue;
+
+      if (!desc) {
+        setFormMessage('error', 'Please add a description for each item.');
+        descEl.focus();
+        return;
+      }
+
+      if (price === null || Number.isNaN(price)) {
+        setFormMessage('error', 'Please provide a valid price for each item.');
+        priceEl.focus();
+        return;
+      }
+
+      items.push({ description: desc, price: price, sale: sale, note: note });
+    }
+
+    if (items.length === 0) {
+      setFormMessage('error', 'Please enter at least one purchased item.');
+      return;
+    }
+
+    const zip = zipInput ? zipInput.value.trim() : "";
+    const currency = currencySelect ? currencySelect.value : "";
+    const store = document.getElementById('store') ? document.getElementById('store').value.trim() : "";
+
+    // Analytics / debug: total value and item count
+    const totalValue = items.reduce((s, it) => s + (Number(it.price) || 0), 0);
+
     if (typeof gtag === "function") {
       gtag("event", "contribution_submit", {
         event_category: "contribution",
         event_label: "contribution_form",
-        value: priceNumber ?? undefined,  // used as custom metric
-        zip: zip || undefined,            // custom dimension
-        currency: currency || undefined,  // custom dimension
-        sale_flag: saleFlag || undefined, // custom dimension
+        items_count: items.length,
+        total_value: totalValue,
+        zip: zip || undefined,
+        currency: currency || undefined,
+        store: store || undefined,
       });
     }
 
-    // Local console confirmation to help you debug in DevTools
-    console.log("contribution_submit event fired", {
-      zip,
-      priceNumber,
-      currency,
-      saleFlag,
-    });
+    console.log('contribution_submit', { zip, currency, store, items, totalValue });
 
     setFormMessage(
       "success",
-      "Thank you! In this demo, your entry is not stored yet – but the submission flow is working."
+      "Thanks — your entry is recorded in this demo. In a full build it would be saved to the database."
     );
 
+    // Reset the form and leave one empty item row
     form.reset();
+    ensureInitialItem();
   });
 }
 
