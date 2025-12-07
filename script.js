@@ -46,6 +46,8 @@ function setFormMessage(type, text) {
 const form = document.getElementById("contribution-form");
 if (form) {
   const zipInput = document.getElementById("zip");
+  const priceInput = document.getElementById("price");
+  const currencySelect = document.getElementById("currency");
 
   form.addEventListener("submit", (event) => {
     event.preventDefault(); // prevent real submission for now
@@ -63,6 +65,26 @@ if (form) {
         zipInput.focus();
         return;
       }
+    }
+
+    // Collect a few fields for analytics
+    const zip = zipInput ? zipInput.value.trim() : "";
+    const priceValue = priceInput ? priceInput.value.trim() : "";
+    const priceNumber = priceValue ? Number(priceValue) : null;
+    const currency = currencySelect ? currencySelect.value : "";
+    const saleFlagInput = form.querySelector('input[name="saleFlag"]:checked');
+    const saleFlag = saleFlagInput ? saleFlagInput.value : "";
+
+    // GA4 event: track contribution submissions (if gtag is available)
+    if (typeof gtag === "function") {
+      gtag("event", "purchase_submitted", {
+        event_category: "contribution",
+        event_label: "contribution_form",
+        value: priceNumber || undefined,
+        zip: zip || undefined,
+        currency: currency || undefined,
+        sale_flag: saleFlag || undefined,
+      });
     }
 
     setFormMessage(
@@ -102,13 +124,7 @@ if (useLocationBtn) {
             latitude
           )}&lon=${encodeURIComponent(longitude)}&zoom=10&addressdetails=1`;
 
-          const response = await fetch(url, {
-            headers: {
-              // Nominatim likes a descriptive referrer; browser will send one automatically,
-              // so no special headers are strictly required here.
-            },
-          });
-
+          const response = await fetch(url);
           if (!response.ok) {
             throw new Error("Reverse geocoding failed");
           }
